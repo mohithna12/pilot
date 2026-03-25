@@ -1,0 +1,151 @@
+PILOT — EXECUTION WORK ORDER
+=============================
+
+This document outlines the order of implementation for the Pilot project,
+organized into phases. Each phase builds on the previous one.
+
+
+PHASE 1: PROJECT SCAFFOLDING & INFRASTRUCTURE
+----------------------------------------------
+1.1  Initialize monorepo structure (frontend + backend directories)
+1.2  Set up Next.js + TypeScript + Tailwind CSS frontend
+1.3  Set up Node.js + Express backend with TypeScript
+1.4  Set up PostgreSQL database and connection pooling
+1.5  Set up Redis instance
+1.6  Define environment variable configs (.env files, dotenv setup)
+1.7  Set up linting, formatting, and basic CI scripts
+
+
+PHASE 2: DATABASE & DATA LAYER
+-------------------------------
+2.1  Write SQL migrations for all tables (users, workspaces, workspace_members,
+     ideas, milestones, tasks, files, notifications)
+2.2  Implement Row Level Security policies
+2.3  Set up an ORM or query builder (e.g., Prisma, Drizzle, or Knex)
+2.4  Seed script for development data
+
+
+PHASE 3: AUTHENTICATION
+------------------------
+3.1  Implement OAuth flow (Google + GitHub) on backend
+3.2  Implement JWT token issuance and verification middleware
+3.3  Implement email magic link auth (optional, can defer)
+3.4  Build frontend sign-in / sign-up pages
+3.5  Add auth context and protected route wrappers on frontend
+3.6  Test full auth round-trip
+
+
+PHASE 4: CORE WORKSPACE CRUD
+------------------------------
+4.1  Backend: workspace CRUD API (create, read, update, delete)
+4.2  Backend: workspace members API (add, remove, list, update role/skills)
+4.3  Backend: workspace invite link generation and redemption
+4.4  Frontend: dashboard page — list workspaces, create/join workspace
+4.5  Frontend: workspace settings page (name, hackathon details, team)
+4.6  Set up Zustand store for workspace state
+
+
+PHASE 5: AI IDEA GENERATOR
+----------------------------
+5.1  Backend: AI service layer — OpenAI API wrapper with prompt management
+5.2  Backend: idea generation endpoint (accepts theme, APIs, skills, constraints)
+5.3  Backend: ideas CRUD API (save, list, delete generated ideas)
+5.4  Frontend: idea generator page — input form + generated idea cards
+5.5  Frontend: idea selection flow (pick an idea to move forward with)
+
+
+PHASE 6: AI PROJECT PLANNER & TASK GENERATION
+-----------------------------------------------
+6.1  Backend: project planning endpoint — takes selected idea, generates
+     milestones, tasks, timeline, task assignments, dependencies
+6.2  Backend: milestones CRUD API
+6.3  Backend: tasks CRUD API (create, update status, assign, reorder)
+6.4  Frontend: milestone and task creation from AI plan output
+6.5  Frontend: ability to manually edit/add/remove tasks and milestones
+
+
+PHASE 7: KANBAN TASK BOARD
+----------------------------
+7.1  Frontend: Kanban board component (To Do / In Progress / Done columns)
+7.2  Implement drag-and-drop (e.g., dnd-kit or react-beautiful-dnd)
+7.3  Task card component (priority, deadline, owner, tags, dependencies)
+7.4  Wire Kanban actions to backend task update APIs
+7.5  Add task filtering and search
+
+
+PHASE 8: TIMELINE VIEW
+------------------------
+8.1  Frontend: timeline/Gantt component showing milestones and tasks over time
+8.2  Current time marker and deadline marker
+8.3  Wire to milestone/task data
+
+
+PHASE 9: REALTIME (WEBSOCKETS)
+-------------------------------
+9.1  Backend: WebSocket server setup (e.g., Socket.IO or ws)
+9.2  Define event types (task:created, task:updated, user:joined, etc.)
+9.3  Backend: emit events on relevant CRUD operations
+9.4  Frontend: WebSocket client connection and event listeners
+9.5  Live updates on Kanban board, timeline, and dashboard
+9.6  User presence indicators
+
+
+PHASE 10: TIME & PROGRESS DASHBOARD
+-------------------------------------
+10.1 Backend: endpoint for workspace stats (tasks completed/remaining,
+     time remaining, completion %, risk level)
+10.2 Implement risk prediction logic (completion rate extrapolation)
+10.3 Suggested scope cuts based on risk level
+10.4 Frontend: workspace overview dashboard with stats, risk, milestones
+
+
+PHASE 11: NOTIFICATIONS
+-------------------------
+11.1 Backend: notification creation logic (deadline approaching, task overdue,
+     halfway point, demo prep, submission reminders)
+11.2 Backend: timed triggers using Redis job queue (e.g., BullMQ)
+11.3 Backend: notification CRUD API (list, mark read)
+11.4 Frontend: notification panel/dropdown
+11.5 In-app notification delivery via WebSocket
+11.6 (Optional) Firebase Cloud Messaging for push notifications
+11.7 (Optional) SendGrid email fallback
+
+
+PHASE 12: FILE & MEDIA UPLOAD
+-------------------------------
+12.1 Set up S3 or Supabase Storage bucket
+12.2 Backend: file upload endpoint (presigned URL or direct upload)
+12.3 Backend: files CRUD API (list, delete)
+12.4 Frontend: file upload UI with drag-and-drop
+12.5 Frontend: file gallery / asset viewer
+
+
+PHASE 13: SUBMISSION GENERATOR
+-------------------------------
+13.1 Backend: submission generation endpoint — AI generates README, Devpost
+     description, pitch script, slide outline, architecture description,
+     feature list, "What we learned", "Challenges we faced"
+13.2 Frontend: submission generator page with generate buttons per section
+13.3 Frontend: editable rich-text output for each generated section
+13.4 Frontend: copy/export functionality
+
+
+PHASE 14: POLISH & INTEGRATION
+-------------------------------
+14.1 Landing page design and implementation
+14.2 Responsive design pass across all screens
+14.3 Loading states, error handling, and empty states
+14.4 End-to-end testing of core user flows
+14.5 Performance optimization (API response times, frontend bundle)
+14.6 Security audit (input validation, RLS verification, JWT handling)
+
+
+PHASE 15: DEPLOYMENT
+---------------------
+15.1 Set up production database and Redis
+15.2 Configure environment variables for production
+15.3 Deploy backend (e.g., Railway, Render, AWS)
+15.4 Deploy frontend (e.g., Vercel)
+15.5 Set up domain and SSL
+15.6 Monitoring and logging setup
+15.7 Smoke test production deployment
